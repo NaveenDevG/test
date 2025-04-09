@@ -1,1 +1,468 @@
-akfjcekc
+Ktln
+
+1. Coroutines (Modern way of handling background tasks)
+Coroutines allow you to run tasks in the background and still interact with the main UI thread easily. You can control which thread the task runs on.
+Example:
+    • Running a task in the background and updating the UI afterward.
+// Import the necessary coroutine libraries
+import kotlinx.coroutines.*
+
+fun main() {
+    // This runs on the background thread (Dispatchers.IO)
+    GlobalScope.launch(Dispatchers.IO) {
+        val result = fetchDataFromNetwork()
+        
+        // Switch to the main thread to update UI
+        withContext(Dispatchers.Main) {
+            println("Data: $result") // This will print on the main thread
+        }
+    }
+}
+
+suspend fun fetchDataFromNetwork(): String {
+    delay(1000) // Simulate a network delay
+    return "Data from network"
+}
+
+How it works:
+    • Dispatchers.IO runs the code in the background.
+    • Dispatchers.Main runs the code on the main thread (usually to update UI).
+
+
+2. AsyncTask (Old Android way, now outdated)
+AsyncTask was used in older Android versions to perform background tasks. It runs the task in the background, then sends the result back to the main thread for UI updates.
+Example:
+kotlin
+Copy
+import android.os.AsyncTask
+
+class MyAsyncTask : AsyncTask<Void, Void, String>() {
+    override fun doInBackground(vararg params: Void?): String {
+        // This runs in the background
+        Thread.sleep(1000) // Simulating work like network request
+        return "Data from AsyncTask"
+    }
+
+    override fun onPostExecute(result: String?) {
+        super.onPostExecute(result)
+        // This runs on the main thread (UI thread)
+        println(result)
+    }
+}
+
+fun main() {
+    MyAsyncTask().execute()
+}
+How it works:
+    • doInBackground() runs the task in the background.
+    • onPostExecute() runs on the main thread after the task finishes.
+Note: AsyncTask is now deprecated, meaning it's no longer recommended for use. Coroutines are a better choice for modern Android development.
+3. Handler (Posting tasks to run later on a specific thread)
+A Handler lets you run tasks on a specific thread. For example, it can post tasks to the main UI thread from a background thread.
+Example:
+kotlin
+Copy
+import android.os.Handler
+import android.os.Looper
+
+fun main() {
+    // Create a Handler that runs on the main thread
+    val handler = Handler(Looper.getMainLooper())
+    
+    // Post a task to run on the main thread
+    handler.post {
+        println("This runs on the main thread")
+    }
+    
+    // Simulate background work with a background thread
+    Thread {
+        println("This runs on a background thread")
+        
+        // Post another task to the main thread
+        handler.post {
+            println("This also runs on the main thread")
+        }
+    }.start()
+}
+How it works:
+    • You create a Handler tied to the main thread's Looper.
+    • You can post tasks to run later on that thread using handler.post { }.
+    • This is useful when you want to make sure that updates (like UI updates) happen on the main thread.
+Summary:
+    • Coroutines are the modern and recommended way to handle background tasks and thread switching.
+    • AsyncTask is outdated, and you should avoid it. It works by running background tasks and then posting the result to the main thread.
+    • Handler is a way to schedule tasks to run on specific threads, often used for UI updates from background threads.
+
+
+1. What is the difference between @Composable and @Preview annotations?
+    • @Composable: This annotation marks a function as composable, meaning it defines a part of the UI. A composable function describes the UI's layout and behavior in a declarative way.
+    • @Preview: This annotation is used to render a preview of your composable UI within Android Studio without needing to run the app on an emulator or device. It helps visualize how the UI will look.
+kotlin
+Copy
+@Composable
+fun Greeting(name: String) {
+    Text(text = "Hello, $name!")
+}
+
+@Preview
+@Composable
+fun PreviewGreeting() {
+    Greeting(name = "Jetpack Compose")
+}
+2. How does state management work in Jetpack Compose?
+In Jetpack Compose, UI is directly tied to state. The most common state management approach uses mutableStateOf and remember. The remember function keeps state across recompositions, while mutableStateOf holds the actual state value.
+Example:
+kotlin
+Copy
+val counter = remember { mutableStateOf(0) }
+
+Button(onClick = { counter.value++ }) {
+    Text("Clicked ${counter.value} times")
+}
+For more complex state management, you can use ViewModel with rememberViewModel() or integrate a state management library like MVI, Redux, or Unidirectional Data Flow (UDF).
+3. How do you optimize Jetpack Compose performance?
+Jetpack Compose's declarative nature helps optimize the UI automatically, but there are still best practices to ensure smooth performance:
+    • Use remember to cache expensive operations: Cache objects, lists, or states to avoid recalculating them unnecessarily.
+    • Use key with lists: For large lists, you can use key to optimize recomposition by identifying the unique identity of items in the list.
+kotlin
+Copy
+LazyColumn {
+    items(itemsList, key = { it.id }) { item ->
+        Text(item.name)
+    }
+}
+    • Avoid unnecessary recompositions: Use LaunchedEffect, DerivedState, and rememberUpdatedState to limit recompositions to necessary cases.
+    • Use Modifier efficiently: Avoid redundant modifiers. Instead of repeatedly applying the same modifier, consider applying them all at once.
+4. How do you handle navigation in Jetpack Compose?
+Jetpack Compose offers a built-in Navigation Component that integrates seamlessly with Compose. The NavController helps you navigate between composables.
+Example of setting up navigation:
+kotlin
+Copy
+@Composable
+fun MyApp() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") { HomeScreen(navController) }
+        composable("details") { DetailsScreen() }
+    }
+}
+In this example, navigation between the HomeScreen and DetailsScreen is handled by the NavController.
+5. What is the difference between remember and rememberSaveable?
+    • remember: Stores the value in memory during recompositions. It is useful for temporary states that don't need to be persisted across app restarts.
+    • rememberSaveable: It’s similar to remember, but it also saves the value to the Bundle, allowing the state to persist across configuration changes and app restarts (e.g., rotating the screen).
+kotlin
+Copy
+val text = rememberSaveable { mutableStateOf("") }
+6. How does Jetpack Compose handle UI composition?
+Jetpack Compose works by breaking down the UI into composable functions that are executed in a tree structure. The Compose runtime keeps track of these functions and when state changes, it re-renders only the necessary parts of the UI.
+Key points:
+    • Recomposition: Only the parts of the UI that are directly dependent on the changed state are recomposed, which is more efficient than a full view redraw.
+    • Slots and Composition: The composition is a tree of composables, and the Compose framework ensures the tree is always consistent with the UI.
+7. How do you handle themes and styles in Jetpack Compose?
+In Jetpack Compose, themes are managed through the MaterialTheme composable. You define your custom themes using colors, typography, and shapes.
+Example:
+kotlin
+Copy
+MaterialTheme(
+    colorScheme = lightColorScheme(),
+    typography = Typography,
+    shapes = Shapes
+) {
+    // Your composables here
+}
+You can define a custom color scheme, typography, and shapes, and apply them throughout your composables.
+8. How do you work with gestures and animations in Jetpack Compose?
+Jetpack Compose provides APIs like Modifier.pointerInput for gesture handling and Animatable for animations. You can easily add gestures like taps, drags, and long presses, or even complex animations using animate*AsState and LaunchedEffect.
+Example of a simple animation:
+kotlin
+Copy
+val scale = remember { Animatable(1f) }
+
+LaunchedEffect(Unit) {
+    scale.animateTo(2f, animationSpec = tween(durationMillis = 1000))
+}
+
+Box(modifier = Modifier.scale(scale.value)) {
+    Text("Hello World")
+}
+9. How do you integrate with traditional Views in Jetpack Compose?
+Jetpack Compose allows you to use traditional Android Views (like TextView, Button, etc.) alongside Compose UI. You can use AndroidView or AndroidViewBinding to embed traditional views within a composable.
+Example:
+kotlin
+Copy
+AndroidView(factory = { context ->
+    Button(context).apply {
+        text = "Click Me"
+        setOnClickListener { /* Handle click */ }
+    }
+})
+10. What is LazyColumn and how is it different from Column?
+    • Column: Displays its children sequentially, and all the children are loaded into memory at once. It is not efficient when displaying a large number of items.
+    • LazyColumn: Designed for performance when displaying large lists. It only loads the items that are visible on the screen, making it more efficient in terms of memory and rendering.
+Example:
+kotlin
+Copy
+LazyColumn {
+    items(itemsList) { item ->
+        Text(text = item.name)
+    }
+}
+11. What is the role of Modifier in Jetpack Compose?
+The Modifier is a powerful tool in Compose that is used to decorate or change the behavior of composable functions. It can be used for styling, positioning, clicking handling, gestures, etc.
+Example:
+kotlin
+Copy
+Text("Hello World", modifier = Modifier.padding(16.dp))
+12. How do you manage background tasks in Jetpack Compose?
+For background tasks like network requests, Compose doesn’t replace the need for background threads. You can use ViewModel to manage long-running operations, coroutines for background tasks, and LaunchedEffect for side effects like launching tasks when composables enter the composition.
+Example:
+kotlin
+Copy
+val data = remember { mutableStateOf("") }
+
+LaunchedEffect(Unit) {
+    data.value = fetchDataFromApi()
+}
+In Kotlin, a sealed class is a class that restricts the class hierarchy to a limited set of types. This is useful when you have a fixed set of types that are related in some way, and you want to handle each type differently. It's often used in situations like handling different states, results, or responses.
+A sealed class can only be subclassed within the same file where it's declared, making it ideal for representing a known set of subclasses.
+Here's a basic example of how you might define and use a sealed class in Kotlin:
+Example of Sealed Class in Kotlin:
+kotlin
+Copy
+// Sealed class definition
+sealed class Result
+
+// Subclasses of the sealed class
+data class Success(val data: String) : Result()
+data class Error(val message: String) : Result()
+object Loading : Result()
+
+fun handleResult(result: Result) {
+    when (result) {
+        is Success -> println("Success with data: ${result.data}")
+        is Error -> println("Error with message: ${result.message}")
+        is Loading -> println("Loading...")
+    }
+}
+
+fun main() {
+    val success = Success("Data loaded successfully!")
+    val error = Error("Failed to load data")
+    val loading = Loading
+
+    handleResult(success)  // Output: Success with data: Data loaded successfully!
+    handleResult(error)    // Output: Error with message: Failed to load data
+    handleResult(loading)  // Output: Loading...
+}
+Explanation:
+    • sealed class Result: This is the base class that is sealed, meaning no other class can inherit from it outside this file.
+    • Success, Error, Loading: These are subclasses of the sealed class Result. Success and Error are data classes, while Loading is an object (which means it's a singleton).
+    • when expression: When working with sealed classes, you can safely use the when expression to handle different cases without needing an else clause. The compiler knows that all cases are covered, ensuring exhaustive checking.
+Use Cases:
+    • Representing states like loading, success, and failure in network requests or operations.
+    • Modelling different types of responses (e.g., success, error, and loading).
+    • Handling different outcomes in a type-safe manner.
+Sealed classes provide more control over type safety and exhaustiveness checks compared to traditional inheritance hierarchies.
+
+
+Java 
+1. Java 8 Features:
+    • Lambda expressions: Enables functional programming.
+    • Stream API: For processing sequences of elements (collections) in a functional style.
+    • Default methods: Methods in interfaces with a body.
+    • Functional interfaces: Interfaces with a single abstract method.
+    • Optional: For handling null values.
+    • Date/Time API: New API for date/time manipulation.
+2. Lambda Expression:
+A lambda expression is a short block of code that takes in parameters and returns a value. It is treated as a function.
+Example:
+java
+Copy
+interface MathOperation {
+    int operate(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        MathOperation addition = (a, b) -> a + b;
+        System.out.println(addition.operate(5, 3)); // Outputs 8
+    }
+}
+3. Stream API:
+Stream API in Java 8 allows functional-style operations on collections of elements, such as filtering, mapping, and reducing.
+Example:
+java
+Copy
+List<String> names = Arrays.asList("John", "Jane", "Doe");
+names.stream().filter(name -> name.startsWith("J")).forEach(System.out::println); 
+4. Intermediate vs Terminal Operations in Streams:
+    • Intermediate: Return a new stream and can be chained (e.g., filter(), map()).
+    • Terminal: End the stream pipeline (e.g., collect(), forEach()).
+5. Why Java Introduced Default and Static Methods in Interfaces:
+Default methods allow adding new methods to interfaces without breaking existing implementations. Static methods allow defining utility methods within interfaces.
+6. How to Create an Immutable Class in Java:
+An immutable class has final fields, a constructor to initialize these fields, and no setter methods.
+Example:
+java
+Copy
+public final class Employee {
+    private final String name;
+    private final int age;
+
+    public Employee(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+}
+7. What is a Singleton Class and When to Use It:
+A Singleton class ensures only one instance of the class exists. Used when one object is needed to coordinate actions across the system (e.g., database connection).
+8. Create Singleton Class:
+Example of a thread-safe Singleton class:
+java
+Copy
+public class Singleton {
+    private static Singleton instance;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+9. How HashMap Internally Works:
+A HashMap works by storing key-value pairs, where keys are hashed using a hash function. The hash code determines the bucket where the value will be stored.
+10. How Many Ways an Object Can Be Created:
+    • Using constructor: new ClassName()
+    • Using reflection: Class.forName("ClassName").newInstance()
+    • Cloning: object.clone()
+11. How HashMap Works with Employee Object as Key:
+HashMap uses hashCode() and equals() to determine key uniqueness. For custom objects like Employee, override both methods to ensure correct behavior.
+12. Stereotype Annotations in Spring Boot:
+    • @Component, @Service, @Repository, @Controller are all used to indicate the role of a class in the Spring container.
+13. What is Dependency Injection:
+Dependency Injection (DI) is a design pattern used to implement Inversion of Control by passing dependencies (objects) to a class rather than having the class create them.
+14. Ways to Achieve Dependency Injection:
+    • Constructor Injection (Best practice)
+    • Setter Injection
+    • Field Injection
+15. @Primary vs @Qualifier:
+    • @Primary marks a bean as the default when multiple beans of the same type exist.
+    • @Qualifier specifies which bean to inject when multiple beans of the same type are available.
+16. How to Create Beans Manually:
+Use @Bean in a configuration class:
+java
+Copy
+@Configuration
+public class AppConfig {
+    @Bean
+    public MyClass myClass() {
+        return new MyClass();
+    }
+}
+17. Explain @SpringBootApplication Annotation:
+It is a combination of three annotations: @Configuration, @EnableAutoConfiguration, and @ComponentScan. It indicates the main class to start the Spring Boot application.
+18. How to Handle Exceptions in Spring Boot:
+Use @ControllerAdvice for global exception handling.
+19. How to Create Global Exceptions:
+java
+Copy
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+20. @RestController vs @Controller:
+@RestController is used for RESTful web services, automatically returning the response as JSON or XML. @Controller is used for rendering views in a traditional web application.
+21. What is PathVariable:
+A @PathVariable is used to extract values from the URI path.
+Example:
+java
+Copy
+@GetMapping("/users/{id}")
+public String getUser(@PathVariable String id) {
+    return "User ID: " + id;
+}
+22. How to Perform Data Validation in REST APIs:
+Use JSR-303 annotations like @NotNull, @Size, etc., and @Valid in Spring.
+23. How Angular Interacts with Backend API:
+Angular uses HTTP client services to make HTTP requests (GET, POST, PUT, DELETE) to backend APIs.
+24. How to Clone Code from Git and Commit Changes:
+    • git clone <repository-url>
+    • Make changes
+    • git add .
+    • git commit -m "commit message"
+    • git push
+25. How to Resolve Merge Conflicts:
+Resolve conflicts manually by editing the conflicting files, then commit and push the changes.
+26. Git Commands Used on a Daily Basis:
+    • git clone
+    • git status
+    • git add
+    • git commit
+    • git push
+    • git pull
+27. How to Write JUnit Test Cases for Static Methods:
+Use PowerMockito to mock static methods.
+28. Use of Mockito Framework:
+Mockito is used for unit testing by mocking dependencies of a class under test.
+29. What is ResponseEntity:
+ResponseEntity represents the entire HTTP response, including status code, headers, and body.
+30. How Microservices Communicate:
+Microservices typically communicate using HTTP/REST, messaging queues, or gRPC.
+31. Difference Between Asynchronous and Synchronous Communication:
+    • Asynchronous: Sender does not wait for a response before continuing.
+    • Synchronous: Sender waits for a response before proceeding.
+32. How RestTemplate Works:
+RestTemplate is used to make HTTP requests from Spring applications and handle responses.
+33. How Component Scan Works:
+Spring automatically detects beans annotated with @Component, @Service, @Repository, etc., and registers them in the application context.
+34. How to Exclude Classes from Component Scan:
+Use @ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = ClassName.class)).
+35. Default Server in Spring Boot:
+The default server is Tomcat.
+36. Default Port in Spring Boot:
+The default port is 8080.
+37. How to Change the Default Server:
+You can change the server by adding the dependency for another server like Jetty or Undertow in pom.xml and configuring it in application.properties.
+38. Use of Spring Actuators:
+Spring Actuator provides built-in endpoints for monitoring and managing Spring Boot applications.
+39. API Gateway:
+An API Gateway acts as an entry point to a system of microservices, routing requests to appropriate services and aggregating results.
+40. Working Procedure of Circuit Breaker:
+A circuit breaker monitors calls to a service. If failures exceed a threshold, it opens the circuit, preventing further calls until the service is healthy again.
+41. Types of Bean Scopes and Default:
+    • Singleton (default)
+    • Prototype
+    • Request
+    • Session
+    • Application
+42. HTTP Codes Used:
+    • 200 OK
+    • 400 Bad Request
+    • 404 Not Found
+    • 500 Internal Server Error
+43. Factory Design Pattern:
+A creational pattern used to instantiate objects without exposing the instantiation logic to the client.
+44. Map vs FlatMap:
+    • map: Transforms each element in the stream.
+    • flatMap: Flattens nested structures into a single stream.
+45. String Comparison Output:
+java
+Copy
+System.out.println(s1 == s2); // false
+System.out.println(s1 == s3); // false
+System.out.println(s3 == s4); // true
+System.out.println(s4 == s5); // false
+Explanation: s1 and s2 are different objects. s3 and s4 are referring to the same object in the string pool. s4 and s5 differ in case.
