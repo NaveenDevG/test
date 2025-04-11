@@ -34,7 +34,134 @@ If they ask follow-up questions, like:
 
 ❓ "How did you implement Singleton in Java Android?"
 "I used a private constructor and a static getInstance() method with synchronized or double-checked locking to ensure thread safety. Useful for Retrofit, Room DB, or shared config managers."
-Ktln
+
+🔷 1. MVC (Model-View-Controller)
+🧠 Key Idea: Separate data (Model), UI (View), and logic (Controller).
+
+🗣 How to Answer:
+
+“Used MVC early in Android where the Activity/Fragment acted as both View and Controller.”
+
+“Over time, this caused fat activities and hard-to-test logic.”
+
+🔥 Pro Tip: Mention transition to MVP/MVVM for better separation.
+
+🔷 2. Singleton
+🧠 Key Idea: Ensure a single instance (used for global access).
+
+🗣 How to Answer:
+
+“Used Singleton for Retrofit, SharedPreferences, Room DB helper.”
+
+“Implemented with a private constructor + synchronized getInstance().”
+
+📌 Example:
+
+java
+Copy
+Edit
+public class MySingleton {
+    private static MySingleton instance;
+    private MySingleton() {}
+
+    public static synchronized MySingleton getInstance() {
+        if (instance == null) instance = new MySingleton();
+        return instance;
+    }
+}
+🔷 3. Factory Pattern
+🧠 Key Idea: Create objects without exposing creation logic.
+
+🗣 How to Answer:
+
+“Used Factory for dynamically generating Fragments, dialogs, or view models.”
+
+📌 Example:
+
+java
+Copy
+Edit
+public class FragmentFactory {
+    public static Fragment getFragment(String type) {
+        switch (type) {
+            case "home": return new HomeFragment();
+            case "profile": return new ProfileFragment();
+            default: return new DefaultFragment();
+        }
+    }
+}
+🔷 4. Observer Pattern
+🧠 Key Idea: Notify observers of state change.
+
+🗣 How to Answer:
+
+“Before LiveData and RxJava, I used callbacks and BroadcastReceivers.”
+
+“Used it for login state, network status, etc.”
+
+📌 Example:
+
+java
+Copy
+Edit
+interface OnLoginListener {
+    void onLoginSuccess();
+    void onLoginFailed();
+}
+🔷 5. Adapter Pattern
+🧠 Key Idea: Bridge between data and UI views.
+
+🗣 How to Answer:
+
+“Essential for RecyclerView and ListView.”
+
+“Created custom adapters to format data for display.”
+
+📌 Example:
+
+java
+Copy
+Edit
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
+    // Binds User data to RecyclerView rows
+}
+🔷 6. Command Pattern (optional)
+🧠 Key Idea: Encapsulate requests as objects.
+
+🗣 How to Answer:
+
+“Used this pattern for encapsulating actions like menu item clicks or undo operations.”
+
+🧪 Quick Interview-Style Q&A
+❓Q: What patterns have you used in Java Android development?
+✅ A:
+
+“In legacy Android projects, I used patterns like MVC, Singleton, Factory, Observer, and Adapter. For example, Singleton for Retrofit, Factory for Fragment creation, and Observer for UI updates before LiveData became standard.”
+
+❓Q: Why is Singleton useful in Android?
+✅ A:
+
+“It ensures a single instance of critical components like Retrofit or SharedPreferences manager. It helps avoid memory leaks and maintains consistency across the app.”
+
+❓Q: Why did you move from MVC to MVVM?
+✅ A:
+
+“MVC often caused fat Activities because they handled both UI and logic. MVVM helps separate concerns better and improves testability, especially when using ViewModel and LiveData.”
+
+❓Q: Can you name a time when the Factory pattern helped?
+✅ A:
+
+“In a dynamic onboarding flow, I used a Factory to provide the right Fragment based on user type, keeping code modular and easy to extend.”
+
+❓Q: How did you implement the Observer pattern before LiveData?
+✅ A:
+
+“We used interfaces and custom callbacks, sometimes EventBus or BroadcastReceiver. It worked, but was more error-prone than LiveData.”
+
+💡 Bonus Tip
+If asked about modernizing legacy Java codebases:
+
+“I’ve worked on migrating Java projects to Kotlin and refactoring from MVC/MVP to MVVM with ViewModel and LiveData. I always ensure that core architecture remains testable and modular.”
 
 1. Coroutines (Modern way of handling background tasks)
 Coroutines allow you to run tasks in the background and still interact with the main UI thread easily. You can control which thread the task runs on.
