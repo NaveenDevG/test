@@ -2,7 +2,38 @@ Hi, I’m Naveen Kumar Gantyada, an Android Developer with 4 years of experience
 
 Currently, at Volksoft Technologies, I lead the development of financial apps, integrating features like credit scoring, offline syncing, and ensuring seamless API integrations. I also have experience in Jetpack Compose, Firebase, and RESTful APIs. Additionally, I’ve worked on projects such as an online doctor consultation app and a multi-app grocery ordering system.
 
+In earlier Android development, especially in Java-based apps, we commonly used classic design patterns like MVC, Singleton, Factory, Observer, and Adapter.
 
+✳️ MVC was a go-to pattern, where Activity or Fragment acted as both View and Controller, and we had a Model class handling data. But this led to the issue of fat Activities, so we later started migrating toward MVP and eventually MVVM with Jetpack components.
+
+🔁 Singleton was widely used for managing global instances like Retrofit clients, SharedPreferences, or SQLite helper. I always ensured it was thread-safe using either synchronized or double-checked locking with volatile.
+
+🏭 For creating dynamic instances, like Fragments based on user type or status, I used the Factory Pattern to encapsulate object creation and keep code modular.
+
+👂 I also used the Observer pattern a lot, especially for UI updates via interface callbacks or BroadcastReceivers—before LiveData and reactive frameworks were common.
+
+🧩 And of course, the Adapter pattern is essential in Android—used heavily for ListView, Spinner, and now RecyclerView—to bind data models to the UI layer.
+
+I appreciate these patterns for teaching the fundamentals of decoupled architecture, and I’ve transitioned many legacy Java codebases to modern architectures while still respecting their roots."
+
+👔 What This Shows the Interviewer:
+You know the older patterns
+
+You used them in real-world scenarios
+
+You understand their drawbacks
+
+You’re capable of modernizing codebases
+
+You're architecturally minded
+
+If they ask follow-up questions, like:
+
+❓ "Why move away from MVC?"
+"MVC made sense early on, but Activities taking the role of both View and Controller caused tightly coupled and bloated code. It became hard to test and maintain. That's why MVP and eventually MVVM were introduced."
+
+❓ "How did you implement Singleton in Java Android?"
+"I used a private constructor and a static getInstance() method with synchronized or double-checked locking to ensure thread safety. Useful for Retrofit, Room DB, or shared config managers."
 Ktln
 
 1. Coroutines (Modern way of handling background tasks)
