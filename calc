@@ -1,0 +1,578 @@
+package com.example.calculator;
+
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.DecimalFormat;
+
+
+public class MainActivity extends AppCompatActivity {
+
+    TextView inputText, resultText;
+    String input = "";
+    String operator = "";
+    int count=0;
+    double firstNumber = 0;
+    float firstNumber1 = 0;
+    double secondNumber = 0;
+    boolean isOperatorPressed = false;
+    boolean isEqualJustPressed = false;
+
+    Button btnClear, btnDivide, btnMultiply, btnMinus, btnPlus, btnEqual, btnDot, btnPercent, btnBackspace;
+    Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
+    int count1 = 0;
+    int count2 = 0;
+
+    private boolean opertorFlag;
+
+    @SuppressLint("MissingInflatedId")
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+//        btnBackspace=findViewById(R.id.)
+
+        updateIds();
+        try {
+            inputText.setText("0");
+            btn0.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("0");
+                }
+            });
+            btn1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("1");
+                }
+            });
+            btn2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("2");
+                }
+            });
+            btn3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("3");
+                }
+            });
+            btn4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("4");
+                }
+            });
+            btn5.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("5");
+                }
+            });
+            btn6.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("6");
+                }
+            });
+            btn7.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("7");
+                }
+            });
+            btn8.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("8");
+                }
+            });
+            btnDot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues(".");
+                }
+            });
+            btn9.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addValues("9");
+                }
+            });
+            btnPlus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setOperator("+");
+                }
+            });
+            btnMinus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setOperator("-");
+                }
+            });
+            btnMultiply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setOperator("x");
+                }
+            });
+            btnDivide.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setOperator("÷");
+                }
+            });
+            btnEqual.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    resultText.setVisibility(VISIBLE);
+                    if (!operator.isEmpty()) {
+                        if (resultText.length()>9){
+                                if(String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("x")
+                                && String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("=")
+                                        ||String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("÷")
+                                        && String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("=")
+                                        ||String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("+")
+                                        && String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("=")
+                                        ||String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("-")
+                                        && String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("=")){
+                            count1++;
+                                    count2++;
+                        }
+                        }
+                        if((firstNumber!=Double.parseDouble(inputText.getText().toString().replaceAll(",",""))||firstNumber1!=Double.parseDouble(inputText.getText().toString().replaceAll(",",""))) && opertorFlag){
+                            calculateResult(secondNumber, operator);
+                        }else{
+                            calculateResult( secondNumber, operator);
+
+                        }
+                    }
+                }
+            });
+            btnClear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clear();
+                }
+            });
+//            btnBackspace.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    backSpaceLogic();
+//                }
+//            });
+
+
+            btnPercent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    calculatePercentage();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+public void addValues(String number){
+
+
+    if (number.equals(".")){
+        input = input.isEmpty() ? "0." : input + ".";
+    } else {
+        input +=number;
+    }
+    if(resultText.getText().length()>0){
+    if(Double.valueOf(input)!=(firstNumber) && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("x")
+            && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("-") &&
+            !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("+")  && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("÷")){
+        opertorFlag=true;
+        resultText.setVisibility(INVISIBLE);
+    }
+    }
+    inputText.setText((formatWithCommas(input)));
+
+}
+
+    public void setOperator(String op) {
+        if (!input.isEmpty()) {
+            secondNumber = Double.parseDouble(input); // Use Double here for accuracy
+            if ((!operator.isEmpty() && isOperatorPressed ) || op.equals("+")   || op.equals("-") ){
+
+                if(op.equals("-")){
+                    firstNumber = calculate(secondNumber,firstNumber , op);
+                }
+                else{
+                    firstNumber = calculate(firstNumber, secondNumber, op);
+                }
+
+            } else {
+                firstNumber = secondNumber;
+            }
+            input = "";
+        }
+
+        resultText.setText(formatNumber(firstNumber) + " " + op);
+
+        if(operator.isEmpty() || operator.equals(op) ){
+            opertorFlag=true;
+        }else{
+            opertorFlag=false;
+        }
+        operator = op;
+
+        isOperatorPressed = true;
+        isEqualJustPressed = false;
+        inputText.setText(formatWithCommas(formatNumber(firstNumber))); // Show current result
+    }
+
+
+       public void calculateResult( double second, String operator){
+
+
+           double rightOperand = 0;
+           if (!input.isEmpty()) {
+               secondNumber = Double.parseDouble(input); // New second number entered
+           }
+
+           if (isOperatorPressed && input.isEmpty()) {
+               secondNumber = firstNumber; // Use first number as second if no second input
+           }
+//           if(firstNumber!=Double.parseDouble(inputText.getText().toString()) && opertorFlag && !operator.equals("÷")){
+//               firstNumber=Double.parseDouble(inputText.getText().toString());
+//               secondNumber=second;
+//           }
+
+         if(resultText.getText().length()>8){
+             if(((firstNumber!=Double.parseDouble(inputText.getText().toString().replaceAll(",",""))
+                     ||(String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("÷")
+                     && String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("=")))||count1>1)
+                     && opertorFlag
+                     && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("x")
+                   && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("-")
+                     && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("+")
+                     && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("÷")
+                 && (((!String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("x")
+                     &&!String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("="))
+                     &&!String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("÷")
+                     &&!String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("+")
+                     &&!String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("-"))||count1>1||count2>1)
+
+                     ){
+               firstNumber=Double.parseDouble(inputText.getText().toString().replaceAll(",",""));
+               secondNumber=second;
+           }else if(resultText.length()>9){
+                 if((String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("x")
+                         && String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("="))
+                         ||(String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("÷")
+                         && String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("="))
+                         ||(String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("+")
+                         && String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("="))
+                         ||(String.valueOf(resultText.getText().charAt(resultText.length()-8)).equals("-")
+                         && String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("="))){
+                 firstNumber=second;
+                 secondNumber=Double.parseDouble(inputText.getText().toString().replaceAll(",",""));}
+             }
+         }else{
+             if((firstNumber!=Double.parseDouble(inputText.getText().toString().replaceAll(",","")))
+                     && opertorFlag
+                     && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("x")
+                     && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("-")
+                     && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("+")
+                     && !String.valueOf(resultText.getText().charAt(resultText.length()-1)).equals("÷")){
+                 firstNumber=Double.parseDouble(inputText.getText().toString().replaceAll(",",""));
+                 secondNumber=second;
+             }
+         }
+           rightOperand =  secondNumber;
+
+           if (!isOperatorPressed){
+               resultText.setText("");
+           }
+           double result = 0;
+           float result1 = 0f;
+           switch (operator) {
+               case "+":
+                   result = firstNumber + rightOperand;
+                   break;
+               case "-":
+                   result = firstNumber - rightOperand;
+                   break;
+               case "x":
+
+                   result1 = Float.parseFloat(String.valueOf(firstNumber * rightOperand));
+
+                   break;
+               case "÷":
+                   if (firstNumber == 0 && secondNumber == 0){
+                       inputText.setText("Result is Undefined");
+                       return;
+                   } else if (secondNumber == 0){
+                       inputText.setText("Cannot divide by zero");
+                       return;
+                   }
+                    result = firstNumber / rightOperand;
+                   break;
+               case "%":
+                   result=(firstNumber * rightOperand) /100;
+                   break;
+           }
+
+           String firstStr = formatNumber(firstNumber);
+           String secondStr = formatNumber(rightOperand);
+           String displayOp = operator;
+
+           if (operator.equals("-") && rightOperand < 0) {
+               secondStr = "(" + secondStr + ")";
+           }
+
+           resultText.setText(firstStr + " " + displayOp + " " + secondStr + " =");
+
+           if(operator.equals("x")){
+           inputText.setText(String.valueOf(formatWithCommas(formatNumber1(result1))));
+           }else{
+               inputText.setText(String.valueOf(formatWithCommas(formatNumber(result))));
+           }
+           resultText.setText(formatNumber(firstNumber) + " " + operator + " " + formatNumber(rightOperand) + " =");
+           if(operator.equals("x")){
+               firstNumber = result1;
+               firstNumber1=Float.parseFloat(String.valueOf(firstNumber));
+           }
+           else{
+               firstNumber = result;
+           } // Store the result for the next operation
+           if(!operator.equals("x")){
+               input = "";
+           }
+           // Clear input
+           isOperatorPressed = false;
+           isEqualJustPressed = true;
+       }
+
+       private void clear(){
+
+           input = "";
+           operator = "";
+           firstNumber = 0;
+           secondNumber = 0;
+           count1=0;
+           count2=0;
+           isOperatorPressed = false;
+           isEqualJustPressed = false;
+           inputText.setText("0");
+           resultText.setText("");
+       }
+
+
+        private double calculate(double first, double second, String operator) {
+            double result = 0;
+            switch (operator) {
+                case "+":
+                    result = first + second;
+                    break;
+                case "-":
+                    result = first - second;
+                    break;
+                case "x":
+                    if (first != 0) {
+                        result = first * second;
+
+                    } else {
+                        result = second;
+                    }
+                    break;
+                case "÷":
+                    if (first != 0) {
+                        result = first / second;
+                    } else {
+                        result = second;
+                    }
+                    break;
+                case "%":
+                    if (first != 0) {
+                        result = (first * second) / 100;
+                    } else {
+                        result = second;
+                    }
+                    break;
+            }
+//            return Double.parseDouble(formatWithCommas((formatNumber(result))));
+            return result;
+        }
+
+
+    private void backSpaceLogic(){
+        try {
+            if (isEqualJustPressed){
+                resultText.setText("");
+                return;
+            }
+            if (input.isEmpty() || input.endsWith(operator)){
+                return;
+            }
+            input = input.substring(0, input.length() -1);
+            inputText.setText(input.isEmpty() ? "0" : input);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+    void updateIds() {
+            inputText = findViewById(R.id.inputText);
+            resultText = findViewById(R.id.resultText);
+            btnClear = findViewById(R.id.btnClear);
+            btnPercent = findViewById(R.id.btnPerc);
+            btnDivide = findViewById(R.id.btnDivide);
+            btnMultiply = findViewById(R.id.btnMultiply);
+            btnMinus = findViewById(R.id.btnSubtract);
+            btnPlus = findViewById(R.id.btnAdd);
+            btnEqual = findViewById(R.id.btnEqual);
+            btnDot = findViewById(R.id.btnDot);
+            btn0 = findViewById(R.id.btn0);
+            btn1 = findViewById(R.id.btn1);
+            btn2 = findViewById(R.id.btn2);
+            btn3 = findViewById(R.id.btn3);
+            btn4 = findViewById(R.id.btn4);
+            btn5 = findViewById(R.id.btn5);
+            btn6 = findViewById(R.id.btn6);
+            btn7 = findViewById(R.id.btn7);
+            btn8 = findViewById(R.id.btn8);
+            btn9 = findViewById(R.id.btn9);
+        }
+
+
+    private String formatNumber(double value) {
+
+//        if (value == (long) value) {
+//            return String.format("%d", (long) value);
+//        }
+//        else {
+//            return String.format("%.6f", value).replaceAll("0+$", "").replaceAll("\\.$", "");
+//        }
+      return String.valueOf(value).replaceAll("0+$", "").replaceAll("\\.$", "");
+//        DecimalFormat df = new DecimalFormat("#.######");
+//        return df.format(v);
+    }
+
+    private String formatNumber1(float value) {
+
+//        if (value == (long) value) {
+//            return String.format("%d", (long) value);
+//        }
+//        else {
+//            return String.format("%.6f", value).replaceAll("0+$", "").replaceAll("\\.$", "");
+//        }
+        return String.valueOf(value).replaceAll("0+$", "").replaceAll("\\.$", "");
+//        DecimalFormat df = new DecimalFormat("#.######");
+//        return df.format(v);
+    }
+
+    private String formatWithCommas(String input){
+        if (input.isEmpty()){
+            return "0";
+        }
+        try {
+            input = input.replace(",","");
+            long value = Long.parseLong(input);
+            return String.format("%,d", value);
+        } catch (NumberFormatException e){
+            return input;
+        }
+    }
+
+    private void calculatePercentage1(){
+        try {
+            if (!operator.isEmpty()){
+                double secondOperand = Double.parseDouble(inputText.getText().toString().replace(",",""));
+                double result = 0;
+                double so = secondOperand/100;
+                switch (operator){
+                    case "+":
+                        result = secondOperand + (secondOperand * (secondOperand/100));
+                        break;
+                    case "-":
+                        result = secondOperand - (secondOperand * (secondOperand/100));
+                        break;
+                    case "x":
+                        result = secondOperand * (secondOperand * (secondOperand/100));
+                        break;
+                    case "÷":
+                        if (secondOperand != 0) {
+                            result = secondOperand / (secondOperand * (secondOperand / 100));
+                        }
+                        break;
+                }
+                resultText.setText(formatNumber(secondOperand) + operator + formatNumber(so) + " =");
+                inputText.setText(String.valueOf(formatNumber(so)));
+                input = String.valueOf(result);
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private void calculatePercentage(){
+        try {
+            if (!operator.isEmpty() ) {
+                double secondOperand = Double.parseDouble(inputText.getText().toString().replace(",", ""));
+                double percentageValue = (secondOperand) / 100;
+                double result = 0;
+
+                switch (operator) {
+                    case "+":
+                        result = (percentageValue*secondOperand);
+                        break;
+                    case "-":
+                        result = (percentageValue*secondOperand);
+                        break;
+                    case "x":
+                        result = firstNumber * percentageValue;
+                        break;
+                    case "÷":
+                        if (percentageValue != 0) {
+                            result = firstNumber / percentageValue;
+                        } else {
+                            resultText.setText("Error");
+                            return;
+                        }
+                        break;
+                }
+
+
+                if (operator.equals("+")||operator.equals("-")){
+                    resultText.setText(formatNumber(firstNumber) + " " + operator + " " + formatNumber(result) + " =");
+                    inputText.setText(formatNumber(result));
+                }else {
+                    resultText.setText(formatNumber(firstNumber) + " " + operator + " " + formatNumber(percentageValue) + " =");
+                    inputText.setText(formatNumber(percentageValue));
+                }
+
+                // Set result as new first number
+//                firstNumber = result;
+                input = String.valueOf(result);
+                isOperatorPressed = false;
+                isEqualJustPressed = true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    }
+
+
+
