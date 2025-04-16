@@ -2,7 +2,30 @@ Hi, I’m Naveen Kumar Gantyada, an Android Developer with 4 years of experience
 
 Currently, at Volksoft Technologies, I lead the development of financial apps, integrating features like credit scoring, offline syncing, and ensuring seamless API integrations. I also have experience in Jetpack Compose, Firebase, and RESTful APIs. Additionally, I’ve worked on projects such as an online doctor consultation app and a multi-app grocery ordering system.
 
+
+
+1- Difference between val and var in Kotlin?
+2- What is a nullable type in Kotlin?
+3- Use of ?., !!, and ?: operators?
+4- What are extension functions in Kotlin?
+5- What is a data class?
+6- Difference between apply, let, and run?
+7- What is a sealed class in Kotlin?
+8- What are coroutines? Difference between launch vs async?
+9- How do you use Retrofit with Coroutines?
+10- How to implement MVVM using ViewModel and LiveData?
+11- What is Flow vs StateFlow in Kotlin?
+12- What is Room and how to define a DAO in Kotlin?
+13- How do you handle RecyclerView in Kotlin?
+14- What is View Binding and how is it used?
+15- How to use Firebase Auth and Firestore in Kotlin?
+
+
+
 In earlier Android development, especially in Java-based apps, we commonly used classic design patterns like MVC, Singleton, Factory, Observer, and Adapter.
+
+
+
 
 ✳️ MVC was a go-to pattern, where Activity or Fragment acted as both View and Controller, and we had a Model class handling data. But this led to the issue of fat Activities, so we later started migrating toward MVP and eventually MVVM with Jetpack components.
 
