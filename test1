@@ -20,7 +20,93 @@ Currently, at Volksoft Technologies, I lead the development of financial apps, i
 14- What is View Binding and how is it used?
 15- How to use Firebase Auth and Firestore in Kotlin?
 
+Flutter
+🟢 1. const vs final vs var
+const never changes, final sets once at runtime, var can change.
 
+Example: const x = 5; final y = DateTime.now(); var z = 10; z = 20;
+
+🟢 2. Stateless vs Stateful
+Stateless = doesn't change; Stateful = changes when something happens.
+
+Example: Counter app is Stateful because the number goes up when clicked.
+
+🟢 3. Widget Lifecycle
+initState() runs when screen starts, dispose() when it closes.
+
+Example: Use initState() to load data when a page opens.
+
+🟢 4. Too many setState() = slow app
+setState() redraws UI; using it too much makes the app laggy.
+
+Example: Only call setState() when needed, not after every small change.
+
+🟢 5. Provider vs Riverpod
+Both help manage app data; Riverpod is easier and safer.
+
+Example: Riverpod doesn’t need context to read data.
+
+🟢 6. Lazy Loading
+Load items when needed, not all at once.
+
+Example: ListView.builder() shows only visible list items, not all 1000.
+
+🟢 7. Clean Architecture
+Split code into UI, logic, and data parts for better structure.
+
+Example: UI shows the screen, Logic decides what to show, Data comes from API.
+
+🟢 8. CustomPaint / Clipper
+Use when you want custom shapes or drawings.
+
+Example: Wave-shaped login screen uses CustomClipper.
+
+🟢 9. Platform Channels
+Used to talk to Android or iOS from Flutter.
+
+Example: Get battery % from phone using MethodChannel.
+
+🟢 10. Named vs Normal Routing
+Named: use route names; Normal: push a screen directly.
+
+Example: Navigator.pushNamed(context, '/home') is named routing.
+
+🟢 11. Deep Linking
+Open app screens from links.
+
+Example: Clicking a link opens the product page inside the app.
+
+🟢 12. Responsive Design
+Make app look good on all screen sizes.
+
+Example: Use MediaQuery.of(context).size.width to adjust layout.
+
+🟢 13. Flutter Testing
+Unit test = test functions, Widget test = test screens, Integration = test full flow.
+
+Example: Test if tapping "+" increases the counter.
+
+Question | Answer (Say This)
+What state management do you use? | "Riverpod with providers"
+How do you structure your project? | "Clean architecture layers"
+How do you improve performance? | "Minimize rebuilds"
+How do you handle app-wide state? | "Global state provider"
+How do you call native code? | "Platform channel bridge"
+How do you make the app responsive? | "MediaQuery + LayoutBuilder"
+How do you do animations? | "Tween with controller"
+How do you test your code? | "Unit, widget, integration"
+How do you handle errors? | "Try-catch + logger"
+What’s your navigation approach? | "Declarative with GoRouter"
+How do you separate business logic? | "UseCase layer abstraction"
+How do you handle dependencies? | "Constructor injection"
+What tools do you use for debugging? | "Flutter DevTools"
+How do you manage async code? | "Future + async/await"
+How do you secure local storage? | "Encrypted SharedPreferences"
+How do you implement CI/CD? | "GitHub Actions workflow"
+What’s your approach to reusable widgets? | "Atomic design pattern"
+How do you structure API calls? | "Repository + model"
+How do you handle app startup? | "Splash + init logic"
+How do you track crashes? | "Firebase Crashlytics"
 
 In earlier Android development, especially in Java-based apps, we commonly used classic design patterns like MVC, Singleton, Factory, Observer, and Adapter.
 
