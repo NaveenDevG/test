@@ -2,6 +2,80 @@ Hi, I’m Naveen Kumar Gantyada, an Android Developer with 4 years of experience
 
 Currently, at Volksoft Technologies, I lead the development of financial apps, integrating features like credit scoring, offline syncing, and ensuring seamless API integrations. I also have experience in Jetpack Compose, Firebase, and RESTful APIs. Additionally, I’ve worked on projects such as an online doctor consultation app and a multi-app grocery ordering system.
 
+1. What is lateinit and how is it different from by lazy?
+
+
+2. Explain the usage of @JvmStatic, @JvmOverloads, and @JvmField.
+
+
+3. What are inline, noinline, and reified keywords in Kotlin?
+
+
+4. Define higher-order functions with an example.
+
+
+5. What is the difference between companion object and object?
+
+
+6. Compare let, run, apply, also, and with scope functions.
+
+
+7. What are sealed classes and how do they differ from abstract classes?
+
+
+8. Explain Elvis (?:) and safe-call (?.) operators.
+
+
+9. What are extension functions in Kotlin?
+
+
+10. What is the difference between const, val, and var?
+
+
+11. Why are Kotlin classes final by default?
+
+
+12. What are data classes in Kotlin and how do they differ from regular classes?
+
+
+13. How would you create a singleton without using object in Kotlin?
+
+
+14. Explain the difference between == and === in Kotlin.
+
+
+15. What is the infix function in Kotlin?
+
+
+16. Explain the usage of inline, noinline, and crossinline.
+
+
+17. What is a reified keyword in Kotlin?
+
+
+18. What are higher-order functions and how are they used?
+
+
+19. How do you check if a lateinit variable has been initialized?
+
+
+20. What are generics in Kotlin?
+
+
+21. Explain the concept of smart casts and safe casts in Kotlin.
+
+
+22. What is the difference between a HashMap and a HashSet?
+
+
+23. How does WeakReference help in avoiding memory leaks?
+
+
+24. Primary and secondary constructors in Kotlin.
+
+
+25. Difference between init block and constructor.
+
 
 
 1- Difference between val and var in Kotlin?
