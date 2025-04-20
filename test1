@@ -2,82 +2,259 @@ Hi, I’m Naveen Kumar Gantyada, an Android Developer with 4 years of experience
 
 Currently, at Volksoft Technologies, I lead the development of financial apps, integrating features like credit scoring, offline syncing, and ensuring seamless API integrations. I also have experience in Jetpack Compose, Firebase, and RESTful APIs. Additionally, I’ve worked on projects such as an online doctor consultation app and a multi-app grocery ordering system.
 
-1. What is lateinit and how is it different from by lazy?
+Here’s a concise Kotlin interview cheat sheet with brief answers and examples, perfect for quick recall during interviews:
 
+---
 
-2. Explain the usage of @JvmStatic, @JvmOverloads, and @JvmField.
+**1. `lateinit` vs `by lazy`:**  
+- `lateinit`: Delayed initialization for **mutable vars**, non-null.
+- `by lazy`: Lazy initialization for **immutable vals**.
 
+```kotlin
+lateinit var name: String  
+val email: String by lazy { "example@email.com" }
+```
 
-3. What are inline, noinline, and reified keywords in Kotlin?
+---
 
+**2. `@JvmStatic`, `@JvmOverloads`, `@JvmField`:**  
+- `@JvmStatic`: Exposes method as static in Java.  
+- `@JvmOverloads`: Creates overloads for default params.  
+- `@JvmField`: Exposes property as a field.
 
-4. Define higher-order functions with an example.
+```kotlin
+companion object {
+    @JvmStatic fun greet() {}
+    @JvmField val ID = 1
+    @JvmOverloads fun hello(msg: String = "Hi") {}
+}
+```
 
+---
 
-5. What is the difference between companion object and object?
+**3. `inline`, `noinline`, `reified`:**  
+- `inline`: Inlines function to reduce overhead.  
+- `noinline`: Prevents inlining specific lambda.  
+- `reified`: Used with `inline` to keep type info at runtime.
 
+```kotlin
+inline fun <reified T> getType() = T::class
+```
 
-6. Compare let, run, apply, also, and with scope functions.
+---
 
+**4. Higher-order function:**  
+Function that takes or returns another function.
 
-7. What are sealed classes and how do they differ from abstract classes?
+```kotlin
+fun operate(a: Int, b: Int, op: (Int, Int) -> Int): Int = op(a, b)
+```
 
+---
 
-8. Explain Elvis (?:) and safe-call (?.) operators.
+**5. `companion object` vs `object`:**  
+- `companion object`: Tied to class, allows static access.  
+- `object`: Singleton instance.
 
+```kotlin
+class MyClass {
+    companion object { val ID = 123 }
+}
+object MySingleton { val name = "Singleton" }
+```
 
-9. What are extension functions in Kotlin?
+---
 
+**6. Scope functions comparison:**
 
-10. What is the difference between const, val, and var?
+| Function | Object Ref | Returns | Use Case |
+|----------|-------------|--------|-----------|
+| `let`    | `it`        | Result | Null checks |
+| `run`    | `this`      | Result | Group ops |
+| `apply`  | `this`      | Object | Init config |
+| `also`   | `it`        | Object | Side-effects |
+| `with`   | `this`      | Result | Non-null context |
 
+---
 
-11. Why are Kotlin classes final by default?
+**7. Sealed vs Abstract class:**  
+- **Sealed**: Restricts subclassing (same file).  
+- **Abstract**: Can be extended anywhere.
 
+```kotlin
+sealed class Result
+class Success : Result()
+```
 
-12. What are data classes in Kotlin and how do they differ from regular classes?
+---
 
+**8. Elvis (`?:`) & Safe-call (`?.`):**  
+- `?.`: Calls only if not null.  
+- `?:`: Returns default if null.
 
-13. How would you create a singleton without using object in Kotlin?
+```kotlin
+val name = user?.name ?: "Guest"
+```
 
+---
 
-14. Explain the difference between == and === in Kotlin.
+**9. Extension Functions:**  
+Add methods to existing classes.
 
+```kotlin
+fun String.capitalizeFirst() = this.replaceFirstChar { it.uppercase() }
+```
 
-15. What is the infix function in Kotlin?
+---
 
+**10. `const`, `val`, `var`:**  
+- `const`: Compile-time constant.  
+- `val`: Immutable (runtime).  
+- `var`: Mutable.
 
-16. Explain the usage of inline, noinline, and crossinline.
+```kotlin
+const val PI = 3.14
+val name = "John"
+var age = 30
+```
 
+---
 
-17. What is a reified keyword in Kotlin?
+**11. Why classes are final by default?**  
+Promotes immutability and prevents unintentional inheritance.
 
+---
 
-18. What are higher-order functions and how are they used?
+**12. Data classes vs regular:**  
+Data classes auto-generate `equals`, `hashCode`, `toString`.
 
+```kotlin
+data class User(val name: String, val age: Int)
+```
 
-19. How do you check if a lateinit variable has been initialized?
+---
 
+**13. Singleton without `object`:**
 
-20. What are generics in Kotlin?
+```kotlin
+class Singleton private constructor() {
+    companion object {
+        val instance = Singleton()
+    }
+}
+```
 
+---
 
-21. Explain the concept of smart casts and safe casts in Kotlin.
+**14. `==` vs `===`:**  
+- `==`: Structural equality (`equals()`)  
+- `===`: Referential equality (same object)
 
+---
 
-22. What is the difference between a HashMap and a HashSet?
+**15. Infix functions:**  
+Custom readable operators.
 
+```kotlin
+infix fun Int.plusBy(x: Int) = this + x  
+val result = 5 plusBy 3
+```
 
-23. How does WeakReference help in avoiding memory leaks?
+---
 
+**16. `inline`, `noinline`, `crossinline`:**  
+- `inline`: Inlines function.  
+- `noinline`: Prevents inlining.  
+- `crossinline`: Prevents non-local returns in lambdas.
 
-24. Primary and secondary constructors in Kotlin.
+---
 
+**17. Reified keyword:**  
+Keeps generic type at runtime (only with `inline`).
 
-25. Difference between init block and constructor.
+```kotlin
+inline fun <reified T> isType(value: Any) = value is T
+```
 
+---
 
+**18. Higher-order functions usage:**  
+Used in `map`, `filter`, `let`, etc.
 
+```kotlin
+listOf(1,2,3).filter { it > 1 }
+```
+
+---
+
+**19. Check if `lateinit` is initialized:**
+
+```kotlin
+::myVar.isInitialized
+```
+
+---
+
+**20. Generics:**  
+Enable type-safe code reuse.
+
+```kotlin
+fun <T> getFirst(list: List<T>): T = list.first()
+```
+
+---
+
+**21. Smart vs Safe cast:**  
+- **Smart**: Auto cast after check.  
+- **Safe**: `as?` returns null if cast fails.
+
+```kotlin
+if (obj is String) println(obj.length) // Smart  
+val str = obj as? String // Safe
+```
+
+---
+
+**22. HashMap vs HashSet:**  
+- **HashMap**: Key-value.  
+- **HashSet**: Unique values only.
+
+---
+
+**23. WeakReference:**  
+Prevents strong reference holding object, allows GC.
+
+```kotlin
+val ref = WeakReference(activity)
+```
+
+---
+
+**24. Primary vs Secondary constructors:**  
+- **Primary**: In class header.  
+- **Secondary**: Inside class body.
+
+```kotlin
+class Person(val name: String) {
+    constructor(name: String, age: Int) : this(name)
+}
+```
+
+---
+
+**25. `init` block vs constructor:**  
+- `init`: Called during object creation.  
+- `constructor`: Can have logic and overloads.
+
+```kotlin
+class Person(val name: String) {
+    init { println("Init called") }
+}
+```
+
+---
+
+Let me know if you want this in a printable format or flashcard style!
 1- Difference between val and var in Kotlin?
 2- What is a nullable type in Kotlin?
 3- Use of ?., !!, and ?: operators?
