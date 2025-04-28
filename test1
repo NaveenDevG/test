@@ -5,7 +5,11 @@ Currently, at Volksoft Technologies, I lead the development of financial apps, i
 Here’s a concise Kotlin interview cheat sheet with brief answers and examples, perfect for quick recall during interviews:
 
 ---
-
+Launch Mode	Description	Example Use Case
+Standard	Default. New instance created every time.	Most common use case.
+SingleTop	Reuses the top activity if it exists.	When you don't want multiple instances of the same activity on the stack.
+SingleTask	Creates a new task if necessary. Existing activity in task is reused and moved to the front.	Ideal for activities that should be the root activity (e.g., main screen).
+SingleInstance	Only one instance of the activity exists in the task. Any other activity is launched in a new task.	When you want an activity to be isolated in its own task (e.g., floating window).
 **1. `lateinit` vs `by lazy`:**  
 - `lateinit`: Delayed initialization for **mutable vars**, non-null.
 - `by lazy`: Lazy initialization for **immutable vals**.
